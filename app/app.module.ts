@@ -11,10 +11,26 @@ import {ProductFilterPipe} from './products/product-filter.pipe';
 
 import {StarComponent} from './shared/star.component';
 
+import {HttpModule} from '@angular/http';
+
+import {ProductDetailComponent} from './products/product-detail.component';
+import {WelcomeComponent} from './home/welcome.component';
+import {RouterModule} from '@angular/router';
+
+import {ProductDetailGuard} from './products/product-guard.service';
+
 @NgModule({
-  imports: [ BrowserModule,FormsModule ],
-  declarations: [ AppComponent,ProductListComponent,ProductFilterPipe, StarComponent ],
-  bootstrap: [ AppComponent ]
+  imports: [ BrowserModule,FormsModule, HttpModule, RouterModule.forRoot([
+    {path : 'products', component : ProductListComponent},
+    {path : 'product/:id', canActivate : [ProductDetailGuard], component : ProductDetailComponent},
+    {path : 'welcome', component : WelcomeComponent},
+    {path : '', redirectTo : 'welcome', pathMatch :'full'},
+    {path : '**', redirectTo : 'welcome', pathMatch :'full'},
+
+  ]) ],
+  declarations: [ AppComponent,ProductListComponent,ProductFilterPipe, StarComponent,ProductDetailComponent, WelcomeComponent ],
+  bootstrap: [ AppComponent ],
+  providers :[ProductDetailGuard]
   
 })
 export class AppModule { }
